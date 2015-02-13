@@ -16,7 +16,7 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="description">打开这个就可以自动抢红包</string>
-    <string name="app_name">自动抢红包神器</string>
+    <string name="app_name">自动抢红包工具</string>
     <string name="explain"><u>使用说明</u></string>
     <string name="share_weixin">微信分享</string>
     <string name="share_noweixin">分享到朋友圈</string>
@@ -24,7 +24,7 @@
         \n\n2. 增大音量,让红包提醒更明显.
         \n\n3. 分享给朋友就能开启"自动抢红包"功能哦！.</string>
         
-    <string name="enable_service_hint">在“设置-辅助功能-服务”中，\n点击“自动抢红包神器”，并打开开关。</string>
+    <string name="enable_service_hint">在“设置-辅助功能-服务”中，\n点击“自动抢红包工具”，并打开开关。</string>
     <string name="enable_service_btn">去设置</string>
     
     <string name="errcode_success">发送成功</string>
