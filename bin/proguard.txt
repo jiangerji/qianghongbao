@@ -1,0 +1,15 @@
+# view AndroidManifest.xml #generated:20
+-keep class com.wanke.tv.MyApplication { <init>(...); }
+
+# view AndroidManifest.xml #generated:27
+-keep class com.wanke.tv.QiangHongBaoActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:42
+-keep class com.wanke.tv.QiangHongBaoService { <init>(...); }
+
+# view AndroidManifest.xml #generated:37
+-keep class com.wanke.tv.explain { <init>(...); }
+
+# view AndroidManifest.xml #generated:53
+-keep class com.wanke.tv.wxapi.WXEntryActivity { <init>(...); }
+
