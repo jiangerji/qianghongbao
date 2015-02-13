@@ -32,6 +32,8 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.baidu.mobstat.StatService;
+
 /**
  * This class demonstrates how an accessibility service can query
  * window content to improve the feedback given to the user.
@@ -64,19 +66,19 @@ public class QiangHongBaoService extends AccessibilityService {
 
         isAccessibilityEnabled();
     }
-    
+
     private boolean isShared() {
         SharedPreferences settings = this.getSharedPreferences("qianghongbao",
                 Context.MODE_PRIVATE);
         return settings.getBoolean("isShared", false);
     }
-    
+
     private boolean isAuto() {
         SharedPreferences settings = this.getSharedPreferences("qianghongbao",
                 Context.MODE_PRIVATE);
         return settings.getBoolean("isAuto", false);
     }
-    
+
     private boolean isOpen() {
         SharedPreferences settings = this.getSharedPreferences("qianghongbao",
                 Context.MODE_PRIVATE);
@@ -93,16 +95,16 @@ public class QiangHongBaoService extends AccessibilityService {
      */
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-    	if (!isOpen()){
-    		return;
-    	}
-    	
-    	boolean isAuto = false;
-    	
-    	if (isShared() && isAuto()){
-    		isAuto = true;
-    	}
-    	
+        if (!isOpen()) {
+            return;
+        }
+
+        boolean isAuto = false;
+
+        if (isShared() && isAuto()) {
+            isAuto = true;
+        }
+
         int type = event.getEventType();
         List<CharSequence> texts = event.getText();
         //        Log.d("acc", "type:" + type);
@@ -117,13 +119,14 @@ public class QiangHongBaoService extends AccessibilityService {
                         e1.printStackTrace();
                     }
 
+                    StatService.onEvent(this, "noti", "open");
                     break;
                 }
             }
         }
-        
-        if (!isAuto){
-        	return;
+
+        if (!isAuto) {
+            return;
         }
 
         if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
@@ -146,6 +149,7 @@ public class QiangHongBaoService extends AccessibilityService {
                 AccessibilityNodeInfo source = event.getSource();
                 chaihongbao(source);
                 inChaiHongBao = true;
+                StatService.onEvent(this, "chai", "open");
                 return;
             }
 
