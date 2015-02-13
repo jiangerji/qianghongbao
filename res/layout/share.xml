@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="40dp"
         android:layout_marginTop="10dp" >
 
         <RelativeLayout
@@ -25,7 +25,7 @@
                 android:id="@+id/share_weixin"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_share_friend" />
+                android:src="@drawable/lk_share_wechat_friends" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,13 +39,13 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp" >
+            android:layout_marginLeft="80dp" >
 
             <ImageView
                 android:id="@+id/share_pengyouquan"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_share_time_line" />
+                android:src="@drawable/lk_share_wechat_circle" />
 
             <TextView
                 android:layout_width="wrap_content"

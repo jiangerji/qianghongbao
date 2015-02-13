@@ -75,7 +75,7 @@ public class QiangHongBaoService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
         int type = event.getEventType();
         List<CharSequence> texts = event.getText();
-        Log.d("acc", "type:" + type);
+        //        Log.d("acc", "type:" + type);
         if (type == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
             for (CharSequence cs : texts) {
                 String aString = cs.toString();
@@ -93,12 +93,12 @@ public class QiangHongBaoService extends AccessibilityService {
         }
 
         if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            Log.d(LOG_TAG,
-                    "TYPE_WINDOW_STATE_CHANGED:" + event.getPackageName()
-                            + ", " + event.getClassName());
+            //            Log.d(LOG_TAG,
+            //                    "TYPE_WINDOW_STATE_CHANGED:" + event.getPackageName()
+            //                            + ", " + event.getClassName());
             boolean isEnterWX = false;
             for (CharSequence cs : texts) {
-                Log.d("acc", "text:" + cs);
+                //                Log.d("acc", "text:" + cs);
                 String aString = cs.toString();
                 if (aString.contains("微信")) {
                     isEnterWX = true;
@@ -128,12 +128,12 @@ public class QiangHongBaoService extends AccessibilityService {
 
                 isInWX = true;
                 // 进入微信界面了
-                Log.d(LOG_TAG, "进入微信界面了！");
+                //                Log.d(LOG_TAG, "进入微信界面了！");
                 AccessibilityNodeInfo source = event.getSource();
                 ArrayList<AccessibilityNodeInfo> nodeInfos = new ArrayList<AccessibilityNodeInfo>();
                 enterHongBao(source, nodeInfos);
                 if (nodeInfos.size() > 0) {
-                    Log.d(LOG_TAG, "进入拆红包界面");
+                    //                    Log.d(LOG_TAG, "进入拆红包界面");
                     nodeInfos.get(nodeInfos.size() - 1).getParent()
                             .performAction(0x10);
                 }
@@ -152,10 +152,10 @@ public class QiangHongBaoService extends AccessibilityService {
                 return;
             }
 
-            Log.d(LOG_TAG,
-                    "TYPE_WINDOW_CONTENT_CHANGED:" + event.getPackageName()
-                            + ", " + event.getClassName() + ", "
-                            + event.getText());
+            //            Log.d(LOG_TAG,
+            //                    "TYPE_WINDOW_CONTENT_CHANGED:" + event.getPackageName()
+            //                            + ", " + event.getClassName() + ", "
+            //                            + event.getText());
             if (event.getPackageName().equals("com.tencent.mm")) {
                 if (inWxContentChanged == true) {
                     if (inChaiHongBao) {
@@ -179,7 +179,7 @@ public class QiangHongBaoService extends AccessibilityService {
             ArrayList<AccessibilityNodeInfo> nodeInfos = new ArrayList<AccessibilityNodeInfo>();
             enterHongBao(source, nodeInfos);
             if (nodeInfos.size() > 0) {
-                Log.d(LOG_TAG, "  进入拆红包界面");
+                //                Log.d(LOG_TAG, "  进入拆红包界面");
                 nodeInfos.get(nodeInfos.size() - 1).getParent()
                         .performAction(0x10);
                 inWxContentChanged = true;
@@ -206,7 +206,7 @@ public class QiangHongBaoService extends AccessibilityService {
             log += "  ";
         }
 
-        Log.d(LOG_TAG, log + nodeInfo.getClassName() + ":" + nodeInfo.getText());
+        //        Log.d(LOG_TAG, log + nodeInfo.getClassName() + ":" + nodeInfo.getText());
         if (nodeInfo.getChildCount() > 0) {
             depth++;
             AccessibilityNodeInfo childNodeInfo = null;
@@ -239,11 +239,11 @@ public class QiangHongBaoService extends AccessibilityService {
             log += "  ";
         }
 
-        Log.d(LOG_TAG, log + nodeInfo.getClassName() + ":" + nodeInfo.getText());
+        //        Log.d(LOG_TAG, log + nodeInfo.getClassName() + ":" + nodeInfo.getText());
         CharSequence text = nodeInfo.getText();
         if (text != null) {
             if (text.toString().contains("微信红包")) {
-                Log.d(LOG_TAG, log + "  加入到微信红包");
+                //                Log.d(LOG_TAG, log + "  加入到微信红包");
                 if (nodeInfos != null) {
                     nodeInfos.add(nodeInfo);
                 }
@@ -261,13 +261,13 @@ public class QiangHongBaoService extends AccessibilityService {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.d(LOG_TAG, "onUnbind");
+        //        Log.d(LOG_TAG, "onUnbind");
         return super.onUnbind(intent);
     }
 
     @Override
     public void onInterrupt() {
-        Log.d(LOG_TAG, "onInterrupt");
+        //        Log.d(LOG_TAG, "onInterrupt");
     }
 
     public boolean isAccessibilityEnabled() {

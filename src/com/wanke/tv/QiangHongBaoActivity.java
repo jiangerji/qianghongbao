@@ -25,6 +25,7 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
@@ -36,6 +37,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -46,6 +48,8 @@ import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.wanke.tv.socialize.LKShareController;
+import com.wanke.tv.socialize.LKShareController.SharePlatformCode;
 
 /**
  * Starts up the task list that will interact with the AccessibilityService
@@ -58,19 +62,21 @@ public class QiangHongBaoActivity extends Activity implements
     private static final Intent sSettingsIntent = new Intent(
             Settings.ACTION_ACCESSIBILITY_SETTINGS);
     private ImageView mstart, mShare, mAbout;
-    View mAuto;
+    View mAuto, mVoice;
     private ImageButton mButton;
     //    private TextView mTextView;
     private View layout;
     boolean mState = true;
     PopupWindow mPopupWindow;
     public static final String WX_APP_ID = "wxe793cd583c6cb873";
+
     private IWXAPI wxApi;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         wxApi = WXAPIFactory.createWXAPI(this, WX_APP_ID);
         wxApi.registerApp(WX_APP_ID);
         setContentView(R.layout.tasklist_main);
@@ -78,6 +84,7 @@ public class QiangHongBaoActivity extends Activity implements
         mShare = (ImageView) findViewById(R.id.mshare);
         mAbout = (ImageView) findViewById(R.id.about);
         mButton = (ImageButton) findViewById(R.id.button);
+        mVoice = findViewById(R.id.voice);
         //        mTextView = (TextView) findViewById(R.id.ming);]
         mAuto = findViewById(R.id.enable_auto);
 
@@ -90,6 +97,7 @@ public class QiangHongBaoActivity extends Activity implements
         mAbout.setOnClickListener(this);
         mButton.setOnClickListener(this);
         mAuto.setOnClickListener(this);
+        mVoice.setOnClickListener(this);
     }
 
     @Override
@@ -102,6 +110,7 @@ public class QiangHongBaoActivity extends Activity implements
         }
 
         mAuto.setSelected(isAuto());
+        mVoice.setSelected(isVoice());
     }
 
     private boolean isOpen() {
@@ -187,55 +196,7 @@ public class QiangHongBaoActivity extends Activity implements
             break;
 
         case R.id.mshare:
-            if (mState) {
-                mState = false;
-                LayoutInflater inflater = LayoutInflater
-                        .from(view.getContext());
-                layout = inflater.inflate(R.layout.share, null);
-                mPopupWindow = new PopupWindow(layout,
-                        LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-                mPopupWindow.setContentView(layout);
-                mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-                mPopupWindow.setOutsideTouchable(true);
-                ImageView weixin = (ImageView) layout
-                        .findViewById(R.id.share_weixin);
-                ImageView pengyouquan = (ImageView) layout
-                        .findViewById(R.id.share_pengyouquan);
-
-                pengyouquan.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View arg0) {
-                        // TODO Auto-generated method stub
-
-                        if (wxApi.isWXAppInstalled()) {
-                            wechatShare(1);
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    R.string.share_noweixin, Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    }
-                });
-                // weixin
-                weixin.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View arg0) {
-                        // TODO Auto-generated method stub
-                        if (wxApi.isWXAppInstalled()) {
-                            wechatShare(0);
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    R.string.share_noweixin, Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    }
-                });
-            } else {
-                mState = true;
-                mPopupWindow.dismiss();
-            }
+            showShare1(view);
             break;
 
         case R.id.about:
@@ -245,12 +206,33 @@ public class QiangHongBaoActivity extends Activity implements
             break;
 
         case R.id.enable_auto:
-            if (isShared()) {
-                mAuto.setSelected(!isAuto());
-                toggleAuto();
-                Log.d("hah", "asdfasdfasdf" + isAuto());
+            if (isAccessibilityEnabled()) {
+                if (isShared()) {
+                    mAuto.setSelected(!isAuto());
+                    toggleAuto();
+                } else {
+                    Toast toast = Toast.makeText(this,
+                            R.string.share_hint,
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    showShare1(view);
+                }
             } else {
+                showEnableServiceHintDialog();
+            }
+            break;
 
+        case R.id.voice:
+            toggleVoice();
+            if (isVoice()) {
+                mVoice.setSelected(true);
+                AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            } else {
+                mVoice.setSelected(false);
+                AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             }
             break;
 
@@ -259,7 +241,82 @@ public class QiangHongBaoActivity extends Activity implements
         }
     }
 
+    private void showShare1(View view) {
+        LKShareController controller = LKShareController.getInstance();
+        controller.addSharePlatform(SharePlatformCode.WeChatCircle);
+        controller.addSharePlatform(SharePlatformCode.WeChat);
+        controller.invokeShare(this,
+                "分享",
+                "content",
+                null,
+                null,
+                "http://www.baidu.com",
+                WX_APP_ID);
+    }
+
+    private void showShare(View view) {
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        layout = inflater.inflate(R.layout.share, null);
+        mPopupWindow = new PopupWindow(layout,
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setContentView(layout);
+        mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+        mPopupWindow.setOutsideTouchable(true);
+        ImageView weixin = (ImageView) layout
+                .findViewById(R.id.share_weixin);
+        ImageView pengyouquan = (ImageView) layout
+                .findViewById(R.id.share_pengyouquan);
+
+        pengyouquan.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                if (wxApi.isWXAppInstalled()) {
+                    wechatShare(1);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            R.string.share_noweixin, Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+                //                mPopupWindow.dismiss();
+            }
+        });
+        // weixin
+        weixin.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                if (wxApi.isWXAppInstalled()) {
+                    wechatShare(0);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            R.string.share_noweixin, Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+                //                mPopupWindow.dismiss();
+            }
+        });
+    }
+
+    private boolean isVoice() {
+        SharedPreferences settings = this.getSharedPreferences("qianghongbao",
+                Context.MODE_PRIVATE);
+        return settings.getBoolean("isVoice", true);
+    }
+
+    private void toggleVoice() {
+        boolean isVoice = isVoice();
+        SharedPreferences settings = this.getSharedPreferences("qianghongbao",
+                Context.MODE_PRIVATE);
+        Editor editor = settings.edit();
+        editor.putBoolean("isVoice", !isVoice);
+        editor.commit();
+    }
+
     private void wechatShare(int flag) {
+        Log.d("acc", "wechat share:" + flag);
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = "www.baidu.com";
         WXMediaMessage msg = new WXMediaMessage(webpage);

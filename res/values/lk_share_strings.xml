@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lk_share_wechat_friend">微信好友</string>
+    <string name="lk_share_wechat_circle">朋友圈</string>
+    <string name="lk_share_wechat_not_support_share_to_circle">微信版本过低！请更新微信。</string>
+    <string name="lk_share_wechat_not_installed">未找到微信客户端！</string>
+    <string name="lk_share_email">邮件</string>
+    <string name="lk_share_email_error">无法使用邮箱分享!</string>
+    <string name="lk_share_facebook">Facebook</string>
+    <string name="lk_share_facebook_error">未发现Facebook客户端或客户端版本过低!</string>
+    <string name="lk_share_twitter">Twitter</string>
+    <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
+    <string name="com_facebook_loginview_log_out_button">Log out</string>
+    <string name="com_facebook_loginview_log_in_button">Log in with Facebook</string>
+    <string name="com_facebook_loginview_logged_in_as">Logged in as: %1$s</string>
+    <string name="com_facebook_loginview_logged_in_using_facebook">Logged in using Facebook</string>
+    <string name="com_facebook_loginview_log_out_action">Log out</string>
+    <string name="com_facebook_loginview_cancel_action">Cancel</string>
+    <string name="com_facebook_logo_content_description">Facebook Logo</string>
+    <string name="com_facebook_usersettingsfragment_log_in_button">Log in&#8230;</string>
+    <string name="com_facebook_usersettingsfragment_logged_in">Logged in</string>
+    <string name="com_facebook_usersettingsfragment_not_logged_in">Not logged in</string>
+    <string name="com_facebook_placepicker_subtitle_format">%1$s • %2$,d were here</string>
+    <string name="com_facebook_placepicker_subtitle_catetory_only_format">%1$s</string>
+    <string name="com_facebook_placepicker_subtitle_were_here_only_format">%1$,d were here</string>
+    <string name="com_facebook_picker_done_button_text">Done</string>
+    <string name="com_facebook_choose_friends">Choose Friends</string>
+    <string name="com_facebook_nearby">Nearby</string>
+    <string name="com_facebook_loading">Loading...</string>
+    <string name="com_facebook_internet_permission_error_title">AndroidManifest Error</string>
+    <string name="com_facebook_internet_permission_error_message">WebView login requires INTERNET permission</string>
+    <string name="com_facebook_requesterror_web_login">Your Facebook account is locked. Please log into www.facebook.com to continue.</string>
+    <string name="com_facebook_requesterror_relogin">Please log into this app again to reconnect your Facebook account.</string>
+    <string name="com_facebook_requesterror_password_changed">Your Facebook password has changed. Please log into this app again to reconnect your Facebook account.</string>
+    <string name="com_facebook_requesterror_reconnect">Please log into this app again to reconnect your Facebook account.</string>
+    <string name="com_facebook_requesterror_permissions">This app doesn’t have permission to do this. To change permissions, try logging into the app again.</string>
+
+</resources>
+
