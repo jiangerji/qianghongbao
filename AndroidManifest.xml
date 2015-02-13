@@ -48,6 +48,11 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/taskbackconfig" />
         </service>
+        <activity 
+            android:name=".wxapi.WXEntryActivity"
+            android:enabled="true">
+            
+        </activity>
         
     </application>
 

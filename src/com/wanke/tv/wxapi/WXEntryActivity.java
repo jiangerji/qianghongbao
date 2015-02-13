@@ -11,20 +11,22 @@ import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.wanke.tv.R;
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler
 {
 
     private IWXAPI api;
+    public static final String WX_APP_ID = "wxe793cd583c6cb873";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //        api = WXAPIFactory.createWXAPI(this, APP_ID, false);
-        //        api.registerApp(APP_ID);
-        //        api.handleIntent(getIntent(), this);
+        api = WXAPIFactory.createWXAPI(this, WX_APP_ID, false);
+        api.registerApp(WX_APP_ID);
+        api.handleIntent(getIntent(), this);
     }
 
     @Override
