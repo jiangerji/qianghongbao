@@ -242,15 +242,19 @@ public class QiangHongBaoActivity extends Activity implements
     }
 
     private void showShare1(View view) {
+    	String url = "http://mp.weixin.qq.com/s?__biz=MzA3MTg5NDEyNQ==&mid=203621455&idx=1&sn=ad9a080ad1ed1a7ff9a00dc1d3b79bb1&scene=1&key=8ea74966bf01cfb698e164751ddd837869a15740bf3ab312424d45339706abcac51cce2e6d4ff53685faa8c1ed6c7d34&ascene=1&uin=NTI0ODI3NDIw&devicetype=webwx&version=70000001&pass_ticket=O%2BZ3Ix%2BK5fGbq%2FsIz6RizKNnNSZjjsRD6pXviGzdsU5vn%2Fx%2BcJjLULeUEilRt1aS";
+    	String content = "微信红包抢不过来，用自动抢红包神器帮你秒抢，无插件，无广告，安全，稳定。";
+    	String title = "自动抢红包神器";
+    	
         LKShareController controller = LKShareController.getInstance();
         controller.addSharePlatform(SharePlatformCode.WeChatCircle);
         controller.addSharePlatform(SharePlatformCode.WeChat);
         controller.invokeShare(this,
-                "分享",
-                "content",
+                title,
+                content,
                 null,
                 null,
-                "http://www.baidu.com",
+                url,
                 WX_APP_ID);
     }
 
@@ -316,12 +320,16 @@ public class QiangHongBaoActivity extends Activity implements
     }
 
     private void wechatShare(int flag) {
+    	String url = "http://mp.weixin.qq.com/s?__biz=MzA3MTg5NDEyNQ==&mid=203621455&idx=1&sn=ad9a080ad1ed1a7ff9a00dc1d3b79bb1&scene=1&key=8ea74966bf01cfb698e164751ddd837869a15740bf3ab312424d45339706abcac51cce2e6d4ff53685faa8c1ed6c7d34&ascene=1&uin=NTI0ODI3NDIw&devicetype=webwx&version=70000001&pass_ticket=O%2BZ3Ix%2BK5fGbq%2FsIz6RizKNnNSZjjsRD6pXviGzdsU5vn%2Fx%2BcJjLULeUEilRt1aS";
+    	String content = "微信红包抢不过来，用自动抢红包神器帮你秒抢，无插件，无广告，安全，稳定。";
+    	String title = "自动抢红包神器";
+    	
         Log.d("acc", "wechat share:" + flag);
         WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = "www.baidu.com";
+        webpage.webpageUrl = url;
         WXMediaMessage msg = new WXMediaMessage(webpage);
-        msg.title = "这里填写标题";
-        msg.description = "这里填写内容";
+        msg.title = title;
+        msg.description = content;
 
         Bitmap thumb = BitmapFactory.decodeResource(getResources(),
                 R.drawable.ic_launcher);

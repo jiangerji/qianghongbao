@@ -38,9 +38,9 @@
             android:id="@+id/enable_auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/ic_auto"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:src="@drawable/ic_auto"
             android:contentDescription="@null" />
 
         <LinearLayout

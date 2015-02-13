@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
@@ -103,6 +105,7 @@ public class SharePlatformChooser extends Dialog {
                         if (shareContent != null) {
                             mSharePlatform.invokeShare(mContext,
                                     shareContent.appID, shareContent);
+                            setShared();
                         }
                     }
                 }
@@ -112,6 +115,14 @@ public class SharePlatformChooser extends Dialog {
         });
 
         setContentView(mContainer);
+    }
+    
+    private void setShared() {
+        SharedPreferences settings = mContext.getSharedPreferences("qianghongbao",
+                Context.MODE_PRIVATE);
+        Editor editor = settings.edit();
+        editor.putBoolean("isShared", true);
+        editor.commit();
     }
 
     private class ImageAdapter extends BaseAdapter {

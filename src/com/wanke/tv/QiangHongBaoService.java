@@ -22,7 +22,9 @@ import java.util.List;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Notification;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
@@ -62,6 +64,24 @@ public class QiangHongBaoService extends AccessibilityService {
 
         isAccessibilityEnabled();
     }
+    
+    private boolean isShared() {
+        SharedPreferences settings = this.getSharedPreferences("qianghongbao",
+                Context.MODE_PRIVATE);
+        return settings.getBoolean("isShared", false);
+    }
+    
+    private boolean isAuto() {
+        SharedPreferences settings = this.getSharedPreferences("qianghongbao",
+                Context.MODE_PRIVATE);
+        return settings.getBoolean("isAuto", false);
+    }
+    
+    private boolean isOpen() {
+        SharedPreferences settings = this.getSharedPreferences("qianghongbao",
+                Context.MODE_PRIVATE);
+        return settings.getBoolean("isOpen", false);
+    }
 
     static boolean isInWX = false;
 
@@ -73,6 +93,16 @@ public class QiangHongBaoService extends AccessibilityService {
      */
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+    	if (!isOpen()){
+    		return;
+    	}
+    	
+    	boolean isAuto = false;
+    	
+    	if (isShared() && isAuto()){
+    		isAuto = true;
+    	}
+    	
         int type = event.getEventType();
         List<CharSequence> texts = event.getText();
         //        Log.d("acc", "type:" + type);
@@ -90,6 +120,10 @@ public class QiangHongBaoService extends AccessibilityService {
                     break;
                 }
             }
+        }
+        
+        if (!isAuto){
+        	return;
         }
 
         if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
