@@ -109,7 +109,7 @@ public class QiangHongBaoActivity extends Activity implements
             mstart.setBackgroundResource(R.drawable.start);
         } else {
         	if(isOpen()){
-        		mstart.setBackgroundResource(R.drawable.stop);
+        		mstart.setBackgroundResource(R.drawable.stop2);
         	} else {
         		mstart.setBackgroundResource(R.drawable.start);
         	}
@@ -152,6 +152,11 @@ public class QiangHongBaoActivity extends Activity implements
         Editor editor = settings.edit();
         editor.putBoolean("isAuto", !isAuto);
         editor.commit();
+        
+        if (!isAuto) {
+        	mstart.setBackgroundResource(R.drawable.stop2);
+        	open(true);
+        }
     }
 
     private void showEnableServiceHintDialog() {
@@ -191,7 +196,7 @@ public class QiangHongBaoActivity extends Activity implements
                     // 关闭
                     open(false);
                 } else {
-                    mstart.setBackgroundResource(R.drawable.stop);
+                    mstart.setBackgroundResource(R.drawable.stop2);
                     // 打开
                     open(true);
                 }
