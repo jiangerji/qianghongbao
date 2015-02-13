@@ -25,6 +25,8 @@ import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
@@ -120,6 +122,8 @@ public class QiangHongBaoService extends AccessibilityService {
                     }
 
                     StatService.onEvent(this, "noti", "open");
+
+                    playSound();
                     break;
                 }
             }
@@ -223,6 +227,27 @@ public class QiangHongBaoService extends AccessibilityService {
                 inWxContentChanged = true;
             }
         }
+    }
+
+    MediaPlayer mMediaPlayer = null;
+
+    private void playSound() {
+        if (mMediaPlayer != null) {
+            return;
+        }
+
+        mMediaPlayer = new MediaPlayer();
+        //读取raw文件夹下的mp3文件
+        mMediaPlayer = MediaPlayer.create(this, R.raw.qiang);
+        mMediaPlayer.start();
+        mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+            }
+        });
     }
 
     static boolean inWxContentChanged = false;
