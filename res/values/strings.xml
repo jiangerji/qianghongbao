@@ -17,4 +17,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="description">打开这个就可以自动抢红包</string>
     <string name="app_name">007自动抢红包神器</string>
-  </resources>
+    <string name="explain"><u>使用说明</u></string>
+    <string name="share_weixin">微信分享</string>
+    <string name="share_noweixin">分享到朋友圈</string>
+    <string name="explain_text">        1. 确认已关闭微信群的"消息免打扰"开关.微信 - 右上角 -消息免打扰
+        \n\n2. 增大音量,让红包提醒更明显.
+        \n\n3. 分享给朋友就能开启"自动抢红包"功能哦！.</string>
+
+</resources>
