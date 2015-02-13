@@ -33,5 +33,10 @@
     <string name="errcode_unknown">发送返回</string>
     
     <string name="share_hint">请分享到微信朋友圈，分享后可以开启自动抢红包功能。</string>
+    
+    <string name="already_open">抢红包功能已开启</string>
+    <string name="already_close">抢红包功能已关闭</string>
+    
+    <string name="start_hint">分享后就可以开始抢红包了！</string>
 
 </resources>

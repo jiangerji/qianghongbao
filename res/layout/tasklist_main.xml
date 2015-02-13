@@ -41,6 +41,7 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:src="@drawable/ic_auto"
+            android:visibility="gone"
             android:contentDescription="@null" />
 
         <LinearLayout
