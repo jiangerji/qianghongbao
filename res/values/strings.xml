@@ -23,5 +23,8 @@
     <string name="explain_text">        1. 确认已关闭微信群的"消息免打扰"开关.微信 - 右上角 -消息免打扰
         \n\n2. 增大音量,让红包提醒更明显.
         \n\n3. 分享给朋友就能开启"自动抢红包"功能哦！.</string>
+        
+    <string name="enable_service_hint">在“设置-辅助功能-服务”中，\n点击“自动抢红包神器”，并打开开关。</string>
+    <string name="enable_service_btn">去设置</string>
 
 </resources>

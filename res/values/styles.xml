@@ -16,5 +16,13 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    
+    <style name="selectorDialog" parent="@*android:style/Theme.Holo.Light.Dialog">  
+        <item name="android:windowIsTranslucent">true</item><!--半透明-->  
+        <item name="android:windowNoTitle">true</item><!--无标题-->
+        <item name="android:windowFullscreen">true</item><!--无标题-->
+        <item name="android:windowBackground">@android:color/transparent</item><!--背景透明-->
+        <item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>
+    </style>
 
 </resources>
