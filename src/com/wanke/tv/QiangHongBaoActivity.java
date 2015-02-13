@@ -107,6 +107,12 @@ public class QiangHongBaoActivity extends Activity implements
         if (!isAccessibilityEnabled()) {
             open(false);
             mstart.setBackgroundResource(R.drawable.start);
+        } else {
+        	if(isOpen()){
+        		mstart.setBackgroundResource(R.drawable.stop);
+        	} else {
+        		mstart.setBackgroundResource(R.drawable.start);
+        	}
         }
 
         mAuto.setSelected(isAuto());
