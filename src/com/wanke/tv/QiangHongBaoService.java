@@ -229,9 +229,19 @@ public class QiangHongBaoService extends AccessibilityService {
         }
     }
 
+    private boolean isVoice() {
+        SharedPreferences settings = this.getSharedPreferences("qianghongbao",
+                Context.MODE_PRIVATE);
+        return settings.getBoolean("isVoice", true);
+    }
+
     MediaPlayer mMediaPlayer = null;
 
     private void playSound() {
+        if (!isVoice()) {
+            return;
+        }
+
         if (mMediaPlayer != null) {
             return;
         }
