@@ -139,9 +139,11 @@ public class QiangHongBaoService extends AccessibilityService {
             }
 
             if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            	/*
                 Log.d(LOG_TAG,
                         "TYPE_WINDOW_STATE_CHANGED:" + event.getPackageName()
                                 + ", " + event.getClassName());
+                */
                 boolean isEnterWX = false;
                 for (CharSequence cs : texts) {
                     //                Log.d("acc", "text:" + cs);
@@ -268,8 +270,12 @@ public class QiangHongBaoService extends AccessibilityService {
 
             @Override
             public void onCompletion(MediaPlayer mp) {
-                mMediaPlayer.release();
-                mMediaPlayer = null;
+            	try{
+            		mMediaPlayer.release();
+            		mMediaPlayer = null;
+            	} catch(Exception e){
+            		
+            	}
             }
         });
     }

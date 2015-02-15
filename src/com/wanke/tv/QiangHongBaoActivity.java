@@ -42,6 +42,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.baidu.mobstat.StatService;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
@@ -284,6 +285,7 @@ public class QiangHongBaoActivity extends Activity implements
             Intent mIntent = new Intent();
             intent = new Intent(getApplicationContext(), explain.class);
             startActivity(intent);
+            StatService.onEvent(this, "help", "open");
             break;
 
         case R.id.enable_auto:
