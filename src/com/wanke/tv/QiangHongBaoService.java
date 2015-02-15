@@ -117,7 +117,7 @@ public class QiangHongBaoService extends AccessibilityService {
                 for (CharSequence cs : texts) {
                     if (cs != null) {
                         String aString = cs.toString();
-                        if (aString.contains("微信红包")) {
+                        if (aString.contains("[微信红包]")) {
                             Notification parcelable = (Notification) event.getParcelableData();
                             try {
                                 parcelable.contentIntent.send();
@@ -139,9 +139,9 @@ public class QiangHongBaoService extends AccessibilityService {
             }
 
             if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-                //            Log.d(LOG_TAG,
-                //                    "TYPE_WINDOW_STATE_CHANGED:" + event.getPackageName()
-                //                            + ", " + event.getClassName());
+                Log.d(LOG_TAG,
+                        "TYPE_WINDOW_STATE_CHANGED:" + event.getPackageName()
+                                + ", " + event.getClassName());
                 boolean isEnterWX = false;
                 for (CharSequence cs : texts) {
                     //                Log.d("acc", "text:" + cs);
@@ -178,12 +178,12 @@ public class QiangHongBaoService extends AccessibilityService {
 
                     isInWX = true;
                     // 进入微信界面了
-                    //                Log.d(LOG_TAG, "进入微信界面了！");
+                    Log.d(LOG_TAG, "进入微信界面了！");
                     AccessibilityNodeInfo source = event.getSource();
                     ArrayList<AccessibilityNodeInfo> nodeInfos = new ArrayList<AccessibilityNodeInfo>();
                     enterHongBao(source, nodeInfos);
                     if (nodeInfos.size() > 0) {
-                        //                    Log.d(LOG_TAG, "进入拆红包界面");
+                        Log.d(LOG_TAG, "进入拆红包界面");
                         nodeInfos.get(nodeInfos.size() - 1).getParent()
                                 .performAction(0x10);
                     }
@@ -207,7 +207,9 @@ public class QiangHongBaoService extends AccessibilityService {
                 //                            + ", " + event.getClassName() + ", "
                 //                            + event.getText());
                 if (event.getPackageName() != null
-                        && event.getPackageName().equals("com.tencent.mm")) {
+                        && event.getPackageName()
+                                .toString()
+                                .startsWith("com.tencent.mm")) {
                     if (inWxContentChanged == true) {
                         if (inChaiHongBao) {
                             inWxContentChanged = false;
