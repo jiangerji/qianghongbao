@@ -97,135 +97,147 @@ public class QiangHongBaoService extends AccessibilityService {
      */
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (!isOpen()) {
-            return;
-        }
 
-        boolean isAuto = false;
+        try {
 
-        if (isShared() && isAuto()) {
-            isAuto = true;
-        }
+            if (!isOpen()) {
+                return;
+            }
 
-        int type = event.getEventType();
-        List<CharSequence> texts = event.getText();
-        //        Log.d("acc", "type:" + type);
-        if (type == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
-            for (CharSequence cs : texts) {
-                String aString = cs.toString();
-                if (aString.contains("微信红包")) {
-                    Notification parcelable = (Notification) event.getParcelableData();
-                    try {
-                        parcelable.contentIntent.send();
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+            boolean isAuto = false;
+
+            if (isShared() && isAuto()) {
+                isAuto = true;
+            }
+
+            int type = event.getEventType();
+            List<CharSequence> texts = event.getText();
+            //        Log.d("acc", "type:" + type);
+            if (type == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+                for (CharSequence cs : texts) {
+                    if (cs != null) {
+                        String aString = cs.toString();
+                        if (aString.contains("微信红包")) {
+                            Notification parcelable = (Notification) event.getParcelableData();
+                            try {
+                                parcelable.contentIntent.send();
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
+
+                            StatService.onEvent(this, "noti", "open");
+
+                            playSound();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!isAuto) {
+                return;
+            }
+
+            if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+                //            Log.d(LOG_TAG,
+                //                    "TYPE_WINDOW_STATE_CHANGED:" + event.getPackageName()
+                //                            + ", " + event.getClassName());
+                boolean isEnterWX = false;
+                for (CharSequence cs : texts) {
+                    //                Log.d("acc", "text:" + cs);
+                    if (cs != null) {
+                        String aString = cs.toString();
+                        if (aString.contains("微信")) {
+                            isEnterWX = true;
+                        }
+                    }
+                }
+
+                if (event.getClassName() != null) {
+                    if (event.getClassName()
+                            .equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
+                        // 进入抢红包界面
+                        AccessibilityNodeInfo source = event.getSource();
+                        chaihongbao(source);
+                        inChaiHongBao = true;
+                        StatService.onEvent(this, "chai", "open");
+                        return;
                     }
 
-                    StatService.onEvent(this, "noti", "open");
-
-                    playSound();
-                    break;
-                }
-            }
-        }
-
-        if (!isAuto) {
-            return;
-        }
-
-        if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            //            Log.d(LOG_TAG,
-            //                    "TYPE_WINDOW_STATE_CHANGED:" + event.getPackageName()
-            //                            + ", " + event.getClassName());
-            boolean isEnterWX = false;
-            for (CharSequence cs : texts) {
-                //                Log.d("acc", "text:" + cs);
-                String aString = cs.toString();
-                if (aString.contains("微信")) {
-                    isEnterWX = true;
+                    if (event.getClassName()
+                            .equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI")) {
+                        inChaiHongBao = true;
+                        return;
+                    }
                 }
 
+                if (isEnterWX) {
+                    if (isInWX) {
+                        return;
+                    }
+
+                    isInWX = true;
+                    // 进入微信界面了
+                    //                Log.d(LOG_TAG, "进入微信界面了！");
+                    AccessibilityNodeInfo source = event.getSource();
+                    ArrayList<AccessibilityNodeInfo> nodeInfos = new ArrayList<AccessibilityNodeInfo>();
+                    enterHongBao(source, nodeInfos);
+                    if (nodeInfos.size() > 0) {
+                        //                    Log.d(LOG_TAG, "进入拆红包界面");
+                        nodeInfos.get(nodeInfos.size() - 1).getParent()
+                                .performAction(0x10);
+                    }
+                    return;
+                } else {
+                    if (!event.getClassName()
+                            .toString()
+                            .startsWith("com.tencent.mm")) {
+                        isInWX = false;
+                    }
+                }
             }
 
-            if (event.getClassName()
-                    .equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
-                // 进入抢红包界面
-                AccessibilityNodeInfo source = event.getSource();
-                chaihongbao(source);
-                inChaiHongBao = true;
-                StatService.onEvent(this, "chai", "open");
-                return;
-            }
-
-            if (event.getClassName()
-                    .equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI")) {
-                inChaiHongBao = true;
-                return;
-            }
-
-            if (isEnterWX) {
-                if (isInWX) {
+            if (type == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
+                if (inChaiHongBao) {
                     return;
                 }
 
-                isInWX = true;
-                // 进入微信界面了
-                //                Log.d(LOG_TAG, "进入微信界面了！");
-                AccessibilityNodeInfo source = event.getSource();
-                ArrayList<AccessibilityNodeInfo> nodeInfos = new ArrayList<AccessibilityNodeInfo>();
-                enterHongBao(source, nodeInfos);
-                if (nodeInfos.size() > 0) {
-                    //                    Log.d(LOG_TAG, "进入拆红包界面");
-                    nodeInfos.get(nodeInfos.size() - 1).getParent()
-                            .performAction(0x10);
-                }
-                return;
-            } else {
-                if (!event.getClassName()
-                        .toString()
-                        .startsWith("com.tencent.mm")) {
-                    isInWX = false;
-                }
-            }
-        }
-
-        if (type == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
-            if (inChaiHongBao) {
-                return;
-            }
-
-            //            Log.d(LOG_TAG,
-            //                    "TYPE_WINDOW_CONTENT_CHANGED:" + event.getPackageName()
-            //                            + ", " + event.getClassName() + ", "
-            //                            + event.getText());
-            if (event.getPackageName().equals("com.tencent.mm")) {
-                if (inWxContentChanged == true) {
-                    if (inChaiHongBao) {
-                        inWxContentChanged = false;
+                //            Log.d(LOG_TAG,
+                //                    "TYPE_WINDOW_CONTENT_CHANGED:" + event.getPackageName()
+                //                            + ", " + event.getClassName() + ", "
+                //                            + event.getText());
+                if (event.getPackageName() != null
+                        && event.getPackageName().equals("com.tencent.mm")) {
+                    if (inWxContentChanged == true) {
+                        if (inChaiHongBao) {
+                            inWxContentChanged = false;
+                        }
+                        inChaiHongBao = false;
+                        return;
                     }
+                } else {
+                    inWxContentChanged = false;
                     inChaiHongBao = false;
                     return;
                 }
-            } else {
-                inWxContentChanged = false;
                 inChaiHongBao = false;
-                return;
-            }
-            inChaiHongBao = false;
 
-            AccessibilityNodeInfo source = event.getSource();
-            if (source == null) {
-                return;
-            }
+                AccessibilityNodeInfo source = event.getSource();
+                if (source == null) {
+                    return;
+                }
 
-            ArrayList<AccessibilityNodeInfo> nodeInfos = new ArrayList<AccessibilityNodeInfo>();
-            enterHongBao(source, nodeInfos);
-            if (nodeInfos.size() > 0) {
-                //                Log.d(LOG_TAG, "  进入拆红包界面");
-                nodeInfos.get(nodeInfos.size() - 1).getParent()
-                        .performAction(0x10);
-                inWxContentChanged = true;
+                ArrayList<AccessibilityNodeInfo> nodeInfos = new ArrayList<AccessibilityNodeInfo>();
+                enterHongBao(source, nodeInfos);
+                if (nodeInfos.size() > 0) {
+                    //                Log.d(LOG_TAG, "  进入拆红包界面");
+                    nodeInfos.get(nodeInfos.size() - 1).getParent()
+                            .performAction(0x10);
+                    inWxContentChanged = true;
+                }
             }
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "Exception:" + e.toString());
         }
     }
 
